@@ -1,0 +1,15 @@
+FROM nginx:alpine
+
+# copy setting for ngnix from local config
+COPY ./docker/nginx.conf /etc/nginx/nginx.conf
+COPY ./docker/fastcgi.conf /etc/nginx/fastcgi.conf
+COPY ./docker/proxy.conf /etc/nginx/proxy.conf
+COPY ./docker/mime.types /etc/nginx/conf/mime.types
+# set error.log file
+COPY ./docker/error.log /etc/nginx/logs/error.log
+# removed default static page
+RUN rm -rf /usr/share/nginx/html/*
+# Copy dist to nginx serve folder
+COPY  /dist_dev /usr/share/nginx/html
+EXPOSE 4200 80
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
